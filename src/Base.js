@@ -30,46 +30,17 @@ class Base {
 
     }
 
+    //загрузка инофрмации о рейсах и необходимых справочников
     loadBase () {
-        // ЗДЕСЬ БУДЕТ ЗАГРУЗКА ИЗ ФАЙЛА, А ПОКА КОНСТАНТЫ
-
-      let params = {
-            airports: ["Москва", "Питер", "Минск", "Наш"],
-            flyCompanies: ["Аэрофлот","S7","AirFrance"],
-            flights: [
-                {flightNum:1308, flyCompaniesId:0, depAirportId:0, arrAirportId:3, planDepTime:"0:00", flightTime:"3:30"},
-                {flightNum:1310, flyCompaniesId:0, depAirportId:1, arrAirportId:3, planDepTime:"1:30", flightTime:"3:00"},
-                {flightNum:1312, flyCompaniesId:0, depAirportId:2, arrAirportId:3, planDepTime:"2:00", flightTime:"1:00"},
-                {flightNum:1309, flyCompaniesId:0, depAirportId:3, arrAirportId:0, planDepTime:"6:00", flightTime:"3:30"},
-                {flightNum:1311, flyCompaniesId:0, depAirportId:3, arrAirportId:1, planDepTime:"5:00", flightTime:"3:00"},
-                {flightNum:1313, flyCompaniesId:0, depAirportId:3, arrAirportId:2, planDepTime:"22:30", flightTime:"1:30"},
-                {flightNum:26754, flyCompaniesId:2, depAirportId:1, arrAirportId:3, planDepTime:"21:15", flightTime:"3:00"},
-                {flightNum:26755, flyCompaniesId:2, depAirportId:3, arrAirportId:1, planDepTime:"15:40", flightTime:"3:20"},
-                {flightNum:3026, flyCompaniesId:1, depAirportId:2, arrAirportId:3, planDepTime:"8:50", flightTime:"5:15"},
-                {flightNum:3027, flyCompaniesId:1, depAirportId:3, arrAirportId:2, planDepTime:"16:25", flightTime:"5:35"}
-            ],
-            flightsOnGo: [
-                {id:0, data:"12/12/2018", factCheck:"12/12/2018 4:55"},
-                {id:1, data:"12/12/2018", factCheck:"12/12/2018 1:55"},
-                {id:5, data:"13/12/2018", factCheck:"13/12/2018 23:30"},
-                {id:8, data:"11/12/2018", factCheck:"11/12/2018 14:05"},
-                {id:9, data:"11/12/2018", factCheck:"11/12/2018 16:45"},
-                {id:3, data:"12/12/2018", factCheck:"12/12/2018 6:15"},
-                {id:3, data:"11/12/2018", factCheck:"11/12/2018 10:15"},
-                {id:6, data:"12/12/2018", factCheck:"12/12/2018 21:15"},
-            ]
-        };
-
+        let params = require ('./db');
+// !!!!здесь нужно поставить проверки на полноту и корректность данных; в противном случае исключать из списка "в работе"
         this.airports = params.airports ? params.airports : []; //массив названий аэропортов
         this.flyCompanies = params.flyCompanies ? params.flyCompanies : [];//массив названий авиакомпаний
         this.flights = params.flights ? params.flights : [];//массив объектов с параметрами рейсов
         this.flightsOnGo = params.flightsOnGo ? params.flightsOnGo : [];//массив объектов с параметрами рейсов, которые находятся "в работе"
-
-// !!!!здесь нужно поставить проверки на полноту и корректность данных; в противном случае исключать из списка "в работе"
-
     }
 
-
+// формирует таблицу рейсов для отображения по заданным параметрам фильтрации; если выводить нечего - массив пустой
     getListToShow (flowFlag, allFlag, flightFiltr) {
 
 //        flowFlag - флаг типа запрошенного потока: true = вылет, false = прилет
@@ -83,7 +54,6 @@ class Base {
         let aCmp = this.flyCompanies;
         let flights = this.flights;
         let res = [];
-
 
         for (let i=0; i<maxNum; i++) {
 
@@ -143,14 +113,24 @@ class Base {
         return res;
     }
 
+    // изменяет местное время в аэропорту на shift минут
+    shiftAirportTime (shift) {
+        let oldDate = this.now;
+        this.now.setTime(oldDate.getTime() + shift*60*1000);
+    }
+
+    //выдает массив с датой в местном аэропорту и временем
+    getLocalTime () {
+        let d = this.now;
+        let h = (d.getHours()<10?"0":"")+d.getHours();
+        let m = (d.getMinutes()<10?"0":"")+d.getMinutes();
+        let mn = (d.getMonth()+1<10?"0":"")+(d.getMonth()+1);
+        return [
+            d.getDate()+'/'+mn+'/'+d.getFullYear(),
+            h+':'+m
+        ]
+    }
+
 }
 
 export default Base;
-
-/*
-        let reader = new FileReader();
-        reader.readAsText("./db.txt");
-        let params = JSON.parse(reader.result);
-        console.log (params);
-
- */

@@ -3,15 +3,15 @@ import './App.css';
 
 class Table extends Component {
     render() {
-        const table = this.props.tableToShow;
+        const table = this.props.tableToShow; //таблица для отображения
         const tabHeight = table.length;
         const tabColNum = 6; //число колонок в таблице
-        const curFlow = this.props.curFlow;
+        const curFlow = this.props.curFlow; //"отображать вылетающие рейсы?"
         const dataHead = curFlow ? "Дата вылета" : "Дата прилета";
         const dataTime = curFlow ? "Время вылета" : "Время прилета";
         let picture;
 
-        if (tabHeight ===0) picture = <p>Нет рейсов для отображения</p>;
+        if (tabHeight === 0) picture = <p>Нет рейсов для отображения</p>;
         else {
             let timeTableHead = <tr key='r0'>
                 <th key={'r0c0'}>Аэропорт</th>
@@ -36,8 +36,6 @@ class Table extends Component {
 
         return (
             <div className="Ctrl">
-                <p>Табло аэропорта: {this.props.airportName}</p>
-                <p>сейчас: {this.props.curDate}</p>
                 {picture}
             </div>
         );
