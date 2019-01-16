@@ -39,7 +39,6 @@ class SkyManager extends Component {
 
     //функция в callback успешной загрузки данных с сервера - устанавливает загруженые данные в справочники
     setData (data) {
-        console.log (data);
         this.airports = data.airports ? data.airports : []; //массив названий аэропортов
         this.flyCompanies = data.flyCompanies ? data.flyCompanies : [];//массив названий авиакомпаний
         this.flights = data.flights ? data.flights : [];//массив объектов с параметрами рейсов
@@ -49,14 +48,12 @@ class SkyManager extends Component {
     //загрузка данных с сервера
     loadBase (success, e) {
         var setData = this.setData;
-        console.log (1);
         $.ajax ({
             url: "http://localhost:63342/aero-tt_backend/src/sky.php",
             type: "POST",
             data: ({}),
             dataType: "json",
             success: function (params){
-//                console.log(params);
                 params = JSON.parse(params);
                 setData(params);
                 return success(e);

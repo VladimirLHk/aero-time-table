@@ -27,13 +27,9 @@ class Control extends Component {
     }
 
     setInitState () {
-//        console.log(2);
-//        console.log(this);
         this.timeTable = this.props.getTimeTable(true, true, "", 3);
         this.airportName = this.props.getAirportName(3);
         this.isInit = true;
-//        console.log(3);
-//        console.log(this);
         this.setState ({
             flowMode: true, //true = "показывать список рейсов на вылет", false = "показывать список рейсов на прилет"
             contentMode: true, //что включать в вывод: true = "все рейсы", false = "только задержанные"
@@ -68,14 +64,12 @@ class Control extends Component {
     }
 
     setAllFlagState (param) {
-        console.log(2);
         let flowFlag = this.state.flowMode;
         let flightFiltr = this.state.fltrValue;
         let localAPrtId = this.state.airportId;
 
         this.timeTable = this.props.getTimeTable(flowFlag, !param, flightFiltr, localAPrtId);
         this.setState ({contentMode: !param});
-        console.log(3);
     }
 
 
@@ -84,14 +78,12 @@ class Control extends Component {
     }
 
     setFltrValueState (param) {
-        console.log(2);
         let flowFlag = this.state.flowMode;
         let allFlag = this.state.contentMode;
         let localAPrtId = this.state.airportId;
 
         this.timeTable = this.props.getTimeTable(flowFlag, allFlag, param, localAPrtId);
         this.setState ({fltrValue: param});
-        console.log(3);
     }
     onChangeFilter(e) {
         let filterStr = e.target.value.match(/\d+/g);
@@ -102,8 +94,6 @@ class Control extends Component {
     eraseFilter(e) {
         this.props.loadData(this.setFltrValueState, "");
     }
-
-
 
     render() {
         console.log(4);
